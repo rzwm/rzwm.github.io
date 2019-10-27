@@ -74,10 +74,7 @@
     </ul>
 </aside>
 
-            <p>做图像处理算法时，免不了要测量函数的运行时间。以前我都是使用OpenCV的计时函数cv::getTickCount()和cv::getTickFrequency()，但是这样一来，在不使用OpenCV的项目中就没法用了。
-幸好C++11增加了std::chrono库，可以很方便地实现跨平台的时间测量。于是我封装了一个简单的计时器类，这样只要将其简单地保存为头文件并在.cpp文件中包含，就可以直接使用了。
-此类当前的计时单位为毫秒，但可以去除/ 1e3从而精确到微秒级。
-// Timer.h #pragma once #include &lt;iostream&gt;#include &lt;chrono&gt; class Timer { public: Timer() : t1(res::zero()) , t2(res::zero()) { tic(); } ~Timer() {} void tic() { t1 = clock::now(); } void toc(const char* str) { t2 = clock::now(); std::cout &lt;&lt; str &lt;&lt; &#34; time: &#34; &lt;&lt; std::chrono::duration_cast&lt;res&gt;(t2 - t1).</p>
+            <p>做图像处理算法时，免不了要测量函数的运行时间。以前我都是使用OpenCV的计时函数cv::getTickCount()和cv::getTickFrequency()，但是这样一来，在不使用OpenCV的项目中就没法用了。</p>
             
             <a href="https://rzwm.github.io/posts/cpp-timer/">Read more…</a>
             
@@ -92,7 +89,7 @@
     <footer>
         <h6>Copyright &copy; 2019 - rzwm |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://rzwm.github.io/index.xml">Subscribe </a></h6>
+            <a href="https://rzwm.github.ioindex.xml">Subscribe </a></h6>
     </footer>
 </div>
 <script src="https://rzwm.github.io/js/scripts.js"></script>
