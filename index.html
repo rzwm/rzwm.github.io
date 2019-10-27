@@ -7,24 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="" /><link rel="alternate" type="application/rss+xml+xml" href="/index.xml" title="" /><meta name="generator" content="Hugo 0.59.0" />
+  <meta name="author" content="rzwm" /><link rel="alternate" type="application/rss+xml+xml" href="https://rzwm.github.io/index.xml" title="" /><meta name="generator" content="Hugo 0.59.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
   <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="/css/styles.css" /></head>
+  <link rel="stylesheet" type="text/css" href="https://rzwm.github.io/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="/"></a>
+                <a href="https://rzwm.github.io/"></a>
             </h1>
 
       <ul id="social-media">
         
         
-             
+          
+        <li><a href="https://github.com/rzwm"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
       </ul>
+      
+      <p><em>永言配命，自求多福。 —— 《诗经·大雅·文王》</em></p>
       
     </header>
 
@@ -33,14 +37,14 @@
     <ul>
         
         <li>
-            <a class="" href="/posts/">
+            <a class="" href="https://rzwm.github.io/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>Posts</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="/about/">
-                <i class="fa-li fa  fa-lg"></i><span>About Hugo</span>
+            <a class="" href="https://rzwm.github.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>关于我</span>
             </a>
         </li>
         
@@ -56,24 +60,26 @@
         <ul>
           
           <li class="first">
-            <h1><a href="/posts/my-first-blog/" title="Creating a New Theme">Creating a New Theme</a></h1> 
+            <h1><a href="https://rzwm.github.io/posts/cpp-timer/" title="C&#43;&#43;11高精度计时器">C&#43;&#43;11高精度计时器</a></h1> 
             <aside>
     <ul>
         <li>
-            <time class="post-date" datetime="2014-09-28T00:00:00Z">Sep 28, 2014</time>
+            <time class="post-date" datetime="2019-10-27T20:35:52&#43;08:00">Oct 27, 2019</time>
         </li>
         
 
         
 
-        <li>34 minutes read</li>
+        <li>One minute read</li>
     </ul>
 </aside>
 
-            <p>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&rsquo;t cover using CSS to style your theme.
-We&rsquo;ll start with creating a new site with a very basic template.</p>
+            <p>做图像处理算法时，免不了要测量函数的运行时间。以前我都是使用OpenCV的计时函数cv::getTickCount()和cv::getTickFrequency()，但是这样一来，在不使用OpenCV的项目中就没法用了。
+幸好C++11增加了std::chrono库，可以很方便地实现跨平台的时间测量。于是我封装了一个简单的计时器类，这样只要将其简单地保存为头文件并在.cpp文件中包含，就可以直接使用了。
+此类当前的计时单位为毫秒，但可以去除/ 1e3从而精确到微秒级。
+// Timer.h #pragma once #include &lt;iostream&gt;#include &lt;chrono&gt; class Timer { public: Timer() : t1(res::zero()) , t2(res::zero()) { tic(); } ~Timer() {} void tic() { t1 = clock::now(); } void toc(const char* str) { t2 = clock::now(); std::cout &lt;&lt; str &lt;&lt; &#34; time: &#34; &lt;&lt; std::chrono::duration_cast&lt;res&gt;(t2 - t1).</p>
             
-            <a href="/posts/my-first-blog/">Read more…</a>
+            <a href="https://rzwm.github.io/posts/cpp-timer/">Read more…</a>
             
           </li>
           
@@ -84,12 +90,12 @@ We&rsquo;ll start with creating a new site with a very basic template.</p>
 
 </main>
     <footer>
-        <h6> |
+        <h6>Copyright &copy; 2019 - rzwm |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="index.xml">Subscribe </a></h6>
+            <a href="https://rzwm.github.io/index.xml">Subscribe </a></h6>
     </footer>
 </div>
-<script src="/js/scripts.js"></script>
+<script src="https://rzwm.github.io/js/scripts.js"></script>
 
 </body>
 

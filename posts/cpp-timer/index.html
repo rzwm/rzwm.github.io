@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="rzwm" /><meta name="generator" content="Hugo 0.59.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://rzwm.github.io/css/styles.css" /></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://rzwm.github.io/"></a>
+            </h1>
+
+      <ul id="social-media">
+        
+        
+          
+        <li><a href="https://github.com/rzwm"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>永言配命，自求多福。 —— 《诗经·大雅·文王》</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://rzwm.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>Posts</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://rzwm.github.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>关于我</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>C&#43;&#43;11高精度计时器</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2019-10-27T20:35:52&#43;08:00">Oct 27, 2019</time>
+        </li>
+        
+
+        
+
+        <li>One minute read</li>
+    </ul>
+</aside>
+
+    
+
+    <p>做图像处理算法时，免不了要测量函数的运行时间。以前我都是使用OpenCV的计时函数<code>cv::getTickCount()</code>和<code>cv::getTickFrequency()</code>，但是这样一来，在不使用OpenCV的项目中就没法用了。</p>
+
+<p>幸好C++11增加了<code>std::chrono</code>库，可以很方便地实现跨平台的时间测量。于是我封装了一个简单的计时器类，这样只要将其简单地保存为头文件并在.cpp文件中包含，就可以直接使用了。</p>
+
+<p>此类当前的计时单位为毫秒，但可以去除<code>/ 1e3</code>从而精确到微秒级。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// Timer.h
+</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma once
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;chrono&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Timer</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+	Timer()
+		<span style="color:#f92672">:</span> t1(res<span style="color:#f92672">::</span>zero())
+		, t2(res<span style="color:#f92672">::</span>zero()) {
+		tic();
+	}
+
+	<span style="color:#f92672">~</span>Timer() {}
+
+	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tic</span>() {
+		t1 <span style="color:#f92672">=</span> clock<span style="color:#f92672">::</span>now();
+	}
+
+	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">toc</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str) {
+		t2 <span style="color:#f92672">=</span> clock<span style="color:#f92672">::</span>now();
+		std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> str <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; time: &#34;</span>
+			<span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>chrono<span style="color:#f92672">::</span>duration_cast<span style="color:#f92672">&lt;</span>res<span style="color:#f92672">&gt;</span>(t2 <span style="color:#f92672">-</span> t1).count() <span style="color:#f92672">/</span> <span style="color:#ae81ff">1e3</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;ms.&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+	}
+
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+	<span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>chrono<span style="color:#f92672">::</span>high_resolution_clock clock;
+	<span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>chrono<span style="color:#f92672">::</span>microseconds res;
+
+	clock<span style="color:#f92672">::</span>time_point t1;
+	clock<span style="color:#f92672">::</span>time_point t2;
+};
+</code></pre></div>
+<p>测试代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Timer.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+	Timer timer;
+
+	std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+	timer.toc(<span style="color:#e6db74">&#34;output 1&#34;</span>);
+
+	timer.tic();
+	std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;2&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+	timer.toc(<span style="color:#e6db74">&#34;output 2&#34;</span>);
+
+<span style="color:#75715e">#ifdef _MSC_VER
+</span><span style="color:#75715e"></span>	system(<span style="color:#e6db74">&#34;pause&#34;</span>);
+<span style="color:#75715e">#endif </span><span style="color:#75715e">// _MSC_VER
+</span><span style="color:#75715e"></span>
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div>
+<p>输出如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ae81ff">1</span>
+output <span style="color:#ae81ff">1</span> time: <span style="color:#ae81ff">0.26</span>ms.
+<span style="color:#ae81ff">2</span>
+output <span style="color:#ae81ff">2</span> time: <span style="color:#ae81ff">0.039</span>ms.
+<span style="color:#960050;background-color:#1e0010">请按任意键继续</span>. . .
+</code></pre></div>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2019 - rzwm |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://rzwm.github.io/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="https://rzwm.github.io/js/scripts.js"></script>
+
+</body>
+
+</html>
+
