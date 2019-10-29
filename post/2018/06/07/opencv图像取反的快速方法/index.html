@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-	<meta name="generator" content="Hugo 0.59.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>永言配命，自求多福。——《诗经·大雅·文王》 | </title>
+    <title>OpenCV图像取反的快速方法 | </title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="/css/theme-override.css">
@@ -28,7 +27,7 @@
     <ul>
       
       
-      <li class="pull-left current">
+      <li class="pull-left ">
         <a href="/">/home/</a>
       </li>
       
@@ -59,26 +58,66 @@
   <body>
     <br/>
 
+<div class="article-meta">
+<h1><span class="title">OpenCV图像取反的快速方法</span></h1>
+<h2 class="author">rzwm</h2>
+<h2 class="date">2018/06/07</h2>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86">图像处理</a> 
+  
+  
+  
+  Tags: <a href="/tags/%E5%8E%BB%E9%9B%BE">去雾</a> <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA">图像增强</a> 
+  
+  
+</p>
+</div>
 
 
 
+<main>
+<p>最近在做一个基于去雾的图像亮度增强的算法<a href="https://github.com/rzwm/IBEABFHR">IBEABFHR</a>，其中用到了图像取反的操作。所谓图像取反，就是将RGB图像的每个像素点(r, g, b)，使用(255 - r, 255 - g, 255 - b)替换。对于灰度图像而言，则是将(g)使用(255 - g)替换。</p>
 
+<p>在OpenCV中要实现此操作，最简单的方法就是遍历每个像素，用255去减，此方法比较粗暴，不再赘述。</p>
+
+<p>更直接地，可以对图像(<code>cv::Mat</code>)整体做减法：</p>
+
+<pre><code class="language-cpp">cv::Mat image = cv::imread(&quot;rgb.jpg&quot;);
+cv::Mat image_inverse = cv::Scalar(255, 255, 255) - image;
+</code></pre>
+
+<p>也可以使用<code>cv::subtract</code>，效果是一样的:</p>
+
+<pre><code class="language-cpp">cv::Mat image = cv::imread(&quot;rgb.jpg&quot;);
+cv::Mat image_inverse;
+cv::subtract(cv::Scalar(255, 255, 255), image, image_inverse);
+</code></pre>
+
+<p>但是我在网上搜索到了更好的方法，那就是使用位运算中的取反操作(~)：</p>
+
+<pre><code class="language-cpp">cv::Mat image = cv::imread(&quot;rgb.jpg&quot;);
+cv::Mat image_inverse = ~image;
+</code></pre>
+
+<p>原理是，对于一个<code>unsigned char</code>类型的变量<code>c</code>，<code>255 - c</code>与<code>~c</code>是相等的。</p>
+
+<p>此方法在<code>opencv2\core\mat.hpp</code>中声明如下：</p>
+
+<pre><code class="language-cpp">CV_EXPORTS MatExpr operator ~(const Mat&amp; m);
+</code></pre>
+
+<p>需要注意的是，此方法仅对整数型的<code>cv::Mat</code>有效。</p>
+
+<p>一般来说，位运算的速度都是比较快的，事实也是如此，我使用一张4160x2340的图像来做测试，两种方法各运算100次取平均时间，结果如下:</p>
 
 <ul>
-  
-  
-  
-  <li>
-    <span class="date">2019/10/27</span>
-    <a href="/post/2019/10/27/c-11%E9%AB%98%E7%B2%BE%E5%BA%A6%E8%AE%A1%E6%97%B6%E5%99%A8%E7%B1%BB/">C++11高精度计时器类</a>
-  </li>
-  
-  <li>
-    <span class="date">2018/06/07</span>
-    <a href="/post/2018/06/07/opencv%E5%9B%BE%E5%83%8F%E5%8F%96%E5%8F%8D%E7%9A%84%E5%BF%AB%E9%80%9F%E6%96%B9%E6%B3%95/">OpenCV图像取反的快速方法</a>
-  </li>
-  
+<li>相减法：14.1862ms</li>
+<li>位运算法：11.8158ms</li>
 </ul>
+
+</main>
 
     <footer>
       

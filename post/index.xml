@@ -24,5 +24,23 @@
 int main() { Timer timer; std::cout &amp;lt;&amp;lt; &amp;quot;1&amp;quot; &amp;lt;&amp;lt; std::endl; timer.</description>
     </item>
     
+    <item>
+      <title>OpenCV图像取反的快速方法</title>
+      <link>/post/2018/06/07/opencv%E5%9B%BE%E5%83%8F%E5%8F%96%E5%8F%8D%E7%9A%84%E5%BF%AB%E9%80%9F%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Thu, 07 Jun 2018 21:24:10 +0000</pubDate>
+      
+      <guid>/post/2018/06/07/opencv%E5%9B%BE%E5%83%8F%E5%8F%96%E5%8F%8D%E7%9A%84%E5%BF%AB%E9%80%9F%E6%96%B9%E6%B3%95/</guid>
+      <description>最近在做一个基于去雾的图像亮度增强的算法IBEABFHR，其中用到了图像取反的操作。所谓图像取反，就是将RGB图像的每个像素点(r, g, b)，使用(255 - r, 255 - g, 255 - b)替换。对于灰度图像而言，则是将(g)使用(255 - g)替换。
+在OpenCV中要实现此操作，最简单的方法就是遍历每个像素，用255去减，此方法比较粗暴，不再赘述。
+更直接地，可以对图像(cv::Mat)整体做减法：
+cv::Mat image = cv::imread(&amp;quot;rgb.jpg&amp;quot;); cv::Mat image_inverse = cv::Scalar(255, 255, 255) - image;  也可以使用cv::subtract，效果是一样的:
+cv::Mat image = cv::imread(&amp;quot;rgb.jpg&amp;quot;); cv::Mat image_inverse; cv::subtract(cv::Scalar(255, 255, 255), image, image_inverse);  但是我在网上搜索到了更好的方法，那就是使用位运算中的取反操作(~)：
+cv::Mat image = cv::imread(&amp;quot;rgb.jpg&amp;quot;); cv::Mat image_inverse = ~image;  原理是，对于一个unsigned char类型的变量c，255 - c与~c是相等的。
+此方法在opencv2\core\mat.hpp中声明如下：
+CV_EXPORTS MatExpr operator ~(const Mat&amp;amp; m);  需要注意的是，此方法仅对整数型的cv::Mat有效。
+一般来说，位运算的速度都是比较快的，事实也是如此，我使用一张4160x2340的图像来做测试，两种方法各运算100次取平均时间，结果如下:
+ 相减法：14.1862ms 位运算法：11.8158ms  </description>
+    </item>
+    
   </channel>
 </rss>
