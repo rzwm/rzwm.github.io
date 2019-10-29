@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>time | </title>
+    <title>C&#43;&#43;11高精度计时器类 | </title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="/css/theme-override.css">
@@ -37,7 +37,7 @@
       </li>
       
       
-      <li class="pull-left current">
+      <li class="pull-left ">
         <a href="/tags/">~/tags</a>
       </li>
       
@@ -58,23 +58,94 @@
   <body>
     <br/>
 
-
-
-<h1>time</h1>
-
-
-
-
-<ul>
+<div class="article-meta">
+<h1><span class="title">C++11高精度计时器类</span></h1>
+<h2 class="author">rzwm</h2>
+<h2 class="date">2019/10/27</h2>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/c&#43;&#43;">C&#43;&#43;</a> 
   
   
   
-  <li>
-    <span class="date">2019/10/27</span>
-    <a href="/post/2019/10/27/c-11%E9%AB%98%E7%B2%BE%E5%BA%A6%E8%AE%A1%E6%97%B6%E5%99%A8%E7%B1%BB/">C++11高精度计时器类</a>
-  </li>
+  Tags: <a href="/tags/time">time</a> 
   
-</ul>
+  
+</p>
+</div>
+
+
+
+<main>
+<p>做图像处理算法时，免不了要测量函数的运行时间。以前我都是使用OpenCV的计时函数<code>cv::getTickCount()</code>和<code>cv::getTickFrequency()</code>，但是这样一来，在不使用OpenCV的项目中就没法用了。</p>
+
+<p>幸好C++11增加了<code>std::chrono</code>库，可以很方便地实现跨平台的时间测量。于是我封装了一个简单的计时器类，这样只要将其简单地保存为头文件，就可以直接包含使用了。</p>
+
+<p>此类当前的计时单位为毫秒，但可以去除<code>/ 1e3</code>从而精确到微秒。</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;chrono&gt;
+
+class Timer {
+public:
+	Timer()
+		: t1(res::zero())
+		, t2(res::zero()) {
+		tic();
+	}
+
+	~Timer() {}
+
+	void tic() {
+		t1 = clock::now();
+	}
+
+	void toc(const char* str) {
+		t2 = clock::now();
+		std::cout &lt;&lt; str &lt;&lt; &quot; time: &quot;
+			&lt;&lt; std::chrono::duration_cast&lt;res&gt;(t2 - t1).count() / 1e3 &lt;&lt; &quot;ms.&quot; &lt;&lt; std::endl;
+	}
+
+private:
+	typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::microseconds res;
+
+	clock::time_point t1;
+	clock::time_point t2;
+};
+</code></pre>
+
+<p>测试代码如下：</p>
+
+<pre><code class="language-cpp">int main() {
+	Timer timer;
+
+	std::cout &lt;&lt; &quot;1&quot; &lt;&lt; std::endl;
+	timer.toc(&quot;output 1&quot;);
+
+	timer.tic();
+	std::cout &lt;&lt; &quot;2&quot; &lt;&lt; std::endl;
+	timer.toc(&quot;output 2&quot;);
+
+#ifdef _MSC_VER
+	system(&quot;pause&quot;);
+#endif // _MSC_VER
+
+	return 0;
+}
+</code></pre>
+
+<p>输出如下：</p>
+
+<pre><code class="language-cpp">1
+output 1 time: 0.26ms.
+2
+output 2 time: 0.039ms.
+请按任意键继续. . .
+</code></pre>
+
+</main>
 
     <footer>
       
