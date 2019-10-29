@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Guided Filter on </title>
+    <link>/tags/guided-filter/</link>
+    <description>Recent content in Guided Filter on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 19 Jul 2018 23:56:27 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/guided-filter/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用Guided Filter去除彩色噪声</title>
+      <link>/post/2018/07/19/%E4%BD%BF%E7%94%A8guided-filter%E5%8E%BB%E9%99%A4%E5%BD%A9%E8%89%B2%E5%99%AA%E5%A3%B0/</link>
+      <pubDate>Thu, 19 Jul 2018 23:56:27 +0000</pubDate>
+      
+      <guid>/post/2018/07/19/%E4%BD%BF%E7%94%A8guided-filter%E5%8E%BB%E9%99%A4%E5%BD%A9%E8%89%B2%E5%99%AA%E5%A3%B0/</guid>
+      <description>注：因图床原因，本文图片已挂
+手机在暗光环境下拍照时，由于进光量不足，拍出的照片上经常会出现严重的彩色噪声，如下图所示： 这种彩色噪声极大地影响了图像的观感，所以必须去除。而要在手机上运行，算法也一定要轻量化。这里提出一种轻量级而且比较实用的去彩噪的方法：使用Guided Filter去噪。
+算法的步骤如下：
+ 将需要去噪的RGB图像(记为I)转换为YUV格式，记为I_YUV； 对I进行guided filter，I自己作为引导图像，得到滤波后的图像，记为I_gf； 将I_gf转换为YUV格式，记为I_gf_YUV； 使用I_YUV的Y通道替换I_gf_YUV的Y通道，得到新的YUV图像，记为I_Y_gf_UV; 将I_Y_gf_UV转换为RGB格式，即为去噪后图像。  去噪后的效果如下： 可以看到，除了颜色有一点冲淡外，去彩噪的效果相当显著。
+测试代码如下：
+// Win10 + Visual Studio Community 2017 + OpenCV 3.3.0 #include &amp;quot;opencv2/highgui/highgui.hpp&amp;quot; #include &amp;quot;opencv2/imgproc/imgproc.hpp&amp;quot; #include &amp;quot;opencv2/ximgproc.hpp&amp;quot; #include &amp;lt;iostream&amp;gt; void chromaNoiseReduction(const cv::Mat&amp;amp; src, cv::Mat&amp;amp; dst, int radius = 30, double eps = 0.03 * 255 * 255) { CV_Assert(src.type() == CV_8UC3); CV_Assert(src.cols % 2 == 0 &amp;amp;&amp;amp; src.rows % 2 == 0); const cv::Mat&amp;amp; I = src; // step 1.</description>
+    </item>
+    
+  </channel>
+</rss>
